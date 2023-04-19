@@ -40,7 +40,3 @@ ninja install
 
 `<installation_prefix>` above should be replaced with a wished installation path.
 Files installed there can later be used as the dependency for your app.
-
-For platform-specific details look at build scripts provided
-in the [scripts](scripts) folder. Each script requires (at least) paths
-to source and installation locations.
