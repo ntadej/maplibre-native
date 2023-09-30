@@ -32,3 +32,7 @@ export(TARGETS
     mbgl-vendor-sqlite
     APPEND FILE MapboxCoreTargets.cmake
 )
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set_target_properties(mbgl-vendor-sqlite PROPERTIES COMPILE_FLAGS "-pthread")
+endif()
