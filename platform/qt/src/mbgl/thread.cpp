@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <QDebug>
+
 namespace mbgl {
 namespace platform {
 
@@ -10,7 +12,9 @@ std::string getCurrentThreadName() {
     return "unknown";
 }
 
-void setCurrentThreadName(const std::string&) {}
+void setCurrentThreadName(const std::string &name) {
+    qDebug() << "Thread: " << name;
+}
 
 void makeThreadLowPriority() {}
 

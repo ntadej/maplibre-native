@@ -22,10 +22,10 @@ public:
                                       return std::make_unique<AssetFileSource>(resourceOptions, clientOptions);
                                   });
 
-        registerFileSourceFactory(FileSourceType::Database,
-                                  [](const ResourceOptions& resourceOptions, const ClientOptions& clientOptions) {
-                                      return std::make_unique<DatabaseFileSource>(resourceOptions, clientOptions);
-                                  });
+        // registerFileSourceFactory(FileSourceType::Database,
+        //                           [](const ResourceOptions& resourceOptions, const ClientOptions& clientOptions) {
+        //                               return std::make_unique<DatabaseFileSource>(resourceOptions, clientOptions);
+        //                           });
 
         registerFileSourceFactory(FileSourceType::FileSystem,
                                   [](const ResourceOptions& resourceOptions, const ClientOptions& clientOptions) {

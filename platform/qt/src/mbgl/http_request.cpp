@@ -69,6 +69,12 @@ void HTTPRequest::handleNetworkReply(QNetworkReply* reply, const QByteArray& dat
 
     using Error = Response::Error;
 
+    if (reply == nullptr) {
+        response.data = std::make_shared<std::string>(data.constData(), data.size());
+        callback(response);
+        return;
+    }
+
     // Handle non-HTTP errors (i.e. like connection).
     if (reply->error() && reply->error() < 100) {
         response.error = std::make_unique<Error>(Error::Reason::Connection, reply->errorString().toStdString());

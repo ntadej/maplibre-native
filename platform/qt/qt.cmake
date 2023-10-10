@@ -87,6 +87,9 @@ target_sources(
         ${PROJECT_SOURCE_DIR}/platform/qt/src/mbgl/timer.cpp
         ${PROJECT_SOURCE_DIR}/platform/qt/src/mbgl/timer_impl.hpp
         ${PROJECT_SOURCE_DIR}/platform/qt/src/mbgl/utf.cpp
+
+        ${PROJECT_SOURCE_DIR}/platform/qt/src/mbgl/shared_services.cpp
+        ${PROJECT_SOURCE_DIR}/platform/qt/src/mbgl/shared_services.hpp
 )
 
 target_compile_definitions(

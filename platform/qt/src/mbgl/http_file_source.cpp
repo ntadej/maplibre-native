@@ -1,6 +1,8 @@
 #include "http_file_source.hpp"
 #include "http_request.hpp"
 
+#include "shared_services.hpp"
+
 #include <mbgl/util/logging.hpp>
 
 #include <QByteArray>
@@ -9,13 +11,28 @@
 #include <QNetworkReply>
 #include <QSslConfiguration>
 
+#include <QDebug>
+
 namespace mbgl {
 
 HTTPFileSource::Impl::Impl(const ResourceOptions& resourceOptions, const ClientOptions& clientOptions)
-    : m_manager(new QNetworkAccessManager(this)),
+    : m_manager(new QNetworkAccessManager()),
       m_resourceOptions(resourceOptions.clone()),
       m_clientOptions(clientOptions.clone()) {
     QNetworkProxyFactory::setUseSystemConfiguration(true);
+
+    if (mbgl::platform::QtServices::getInstance().networkManager() != nullptr) {
+        qDebug() << "MAMO GA!";
+        m_externalManager = true;
+        connect(this,
+                &HTTPFileSource::Impl::externalRequest,
+                mbgl::platform::QtServices::getInstance().networkManager(),
+                &mbgl::platform::QtNetworkManager::request);
+        connect(mbgl::platform::QtServices::getInstance().networkManager(),
+                &mbgl::platform::QtNetworkManager::result,
+                this,
+                &HTTPFileSource::Impl::onReplyFinishedExternal);
+    }
 }
 
 void HTTPFileSource::Impl::request(HTTPRequest* req) {
@@ -38,13 +55,18 @@ void HTTPFileSource::Impl::request(HTTPRequest* req) {
 #endif
 #endif
 
-    data.first = m_manager->get(networkRequest);
-    connect(data.first, &QNetworkReply::finished, this, &HTTPFileSource::Impl::onReplyFinished);
+    if (m_externalManager) {
+        qDebug() << "Emit!" << url;
+        emit externalRequest(networkRequest);
+    } else {
+        data.first = m_manager->get(networkRequest);
+        connect(data.first, &QNetworkReply::finished, this, &HTTPFileSource::Impl::onReplyFinished);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    connect(data.first, &QNetworkReply::errorOccurred, this, &HTTPFileSource::Impl::onReplyFinished);
+        connect(data.first, &QNetworkReply::errorOccurred, this, &HTTPFileSource::Impl::onReplyFinished);
 #else
-    connect(data.first, &QNetworkReply::error, this, &HTTPFileSource::Impl::onReplyFinished);
+        connect(data.first, &QNetworkReply::error, this, &HTTPFileSource::Impl::onReplyFinished);
 #endif
+    }
 }
 
 void HTTPFileSource::Impl::cancel(HTTPRequest* req) {
@@ -57,6 +79,10 @@ void HTTPFileSource::Impl::cancel(HTTPRequest* req) {
 
     QPair<QPointer<QNetworkReply>, QVector<HTTPRequest*>>& data = it.value();
     QNetworkReply* reply = data.first;
+    if (reply == nullptr) {
+        return;
+    }
+
     QVector<HTTPRequest*>& requestsVector = data.second;
 
     for (int i = 0; i < requestsVector.size(); ++i) {
@@ -76,6 +102,8 @@ void HTTPFileSource::Impl::onReplyFinished() {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     const QUrl& url = reply->request().url();
 
+    qDebug() << "Finished:" << url;
+
     auto it = m_pending.find(url);
     if (it == m_pending.end()) {
         reply->deleteLater();
@@ -84,6 +112,9 @@ void HTTPFileSource::Impl::onReplyFinished() {
 
     QByteArray data = reply->readAll();
     QVector<HTTPRequest*>& requestsVector = it.value().second;
+
+    qDebug() << "Reply:" << url;
+    //  << data;
 
     // Cannot use the iterator to walk the requestsVector
     // because calling handleNetworkReply() might get
@@ -94,6 +125,29 @@ void HTTPFileSource::Impl::onReplyFinished() {
 
     m_pending.erase(it);
     reply->deleteLater();
+}
+
+void HTTPFileSource::Impl::onReplyFinishedExternal(QUrl url, QByteArray data) {
+    qDebug() << "Finished external:" << url;
+
+    auto it = m_pending.find(url);
+    if (it == m_pending.end()) {
+        return;
+    }
+
+    QVector<HTTPRequest*>& requestsVector = it.value().second;
+
+    qDebug() << "Reply:" << url;
+    // << data;
+
+    // Cannot use the iterator to walk the requestsVector
+    // because calling handleNetworkReply() might get
+    // requests added to the requestsVector.
+    while (!requestsVector.isEmpty()) {
+        requestsVector.takeFirst()->handleNetworkReply(nullptr, data);
+    }
+
+    m_pending.erase(it);
 }
 
 void HTTPFileSource::Impl::setResourceOptions(ResourceOptions options) {

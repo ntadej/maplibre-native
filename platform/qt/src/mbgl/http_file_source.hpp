@@ -36,12 +36,18 @@ public:
 
 public slots:
     void onReplyFinished();
+    void onReplyFinishedExternal(QUrl url, QByteArray data);
+
+signals:
+    void externalRequest(QNetworkRequest);
 
 private:
     QMap<QUrl, QPair<QPointer<QNetworkReply>, QVector<HTTPRequest *>>> m_pending;
     QNetworkAccessManager *m_manager;
     ResourceOptions m_resourceOptions;
     ClientOptions m_clientOptions;
+
+    bool m_externalManager{};
 };
 
 } // namespace mbgl
