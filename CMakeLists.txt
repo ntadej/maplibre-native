@@ -1345,6 +1345,11 @@ list(APPEND
         ${PROJECT_SOURCE_DIR}/src/mbgl/text/harfbuzz.hpp
 )
 if (MLN_TEXT_SHAPING_HARFBUZZ)
+    # Set CMake policies to mute compile warnings about deprecated Python finding modules
+    if(POLICY CMP0148)
+        cmake_policy(SET CMP0148 NEW)
+    endif()
+
     message(STATUS "Configuring with HarfBuzz text shaping")
     list(APPEND
         SRC_FILES
