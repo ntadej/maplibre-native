@@ -10,6 +10,10 @@ class RenderVectorSource final : public RenderTileSetSource {
 public:
     explicit RenderVectorSource(Immutable<style::TileSource::Impl>, const TaggedScheduler&);
 
+    /// Enable the decoding of MLT tiles with FastPFOR integer encodings.
+    /// Default is false.  Such tiles will fail if not explicitly enabled.
+    void setEnableFastPFOR(bool enable) override { enableFastPFOR = enable; }
+
 private:
     void updateInternal(const Tileset&,
                         const std::vector<Immutable<style::LayerProperties>>&,
@@ -20,6 +24,7 @@ private:
 
 private:
     std::optional<bool> isMLT;
+    bool enableFastPFOR = false;
 };
 
 } // namespace mbgl
