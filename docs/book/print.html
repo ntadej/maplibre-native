@@ -74,7 +74,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2bfce841.js";
+            window.path_to_searchindex_js = "searchindex-4a75adb5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-24c1b73c.js"></script>
@@ -316,7 +316,7 @@ cd platform/android
 <h2 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h2>
 <p>All new code should be written in <a href="https://kotlinlang.org/">Kotlin</a>.</p>
 <h2 id="style-checking"><a class="header" href="#style-checking">Style Checking</a></h2>
-<p>To check Kotlin style, we use <a href="https://pinterest.github.io/ktlint/">ktlint</a>. This linter is based on the <a href="https://kotlinlang.org/docs/coding-conventions.html">official Kotlin coding conventions</a>. We intergrate with it using the <a href="https://github.com/jeremymailen/kotlinter-gradle">kotlinder</a> Gradle plugin.</p>
+<p>To check Kotlin style, we use <a href="https://pinterest.github.io/ktlint/">ktlint</a>. This linter is based on the <a href="https://kotlinlang.org/docs/coding-conventions.html">official Kotlin coding conventions</a>. We integrate with it using the <a href="https://github.com/jeremymailen/kotlinter-gradle">kotlinder</a> Gradle plugin.</p>
 <p>To check the style of all Kotlin source files, use:</p>
 <pre><code>$ ./gradlew checkStyle
 </code></pre>
@@ -620,7 +620,7 @@ cargo build --release --target aarch64-linux-android
 <h1 id="maplibre-ios-developer-guide"><a class="header" href="#maplibre-ios-developer-guide">MapLibre iOS Developer Guide</a></h1>
 <h2 id="bazel"><a class="header" href="#bazel">Bazel</a></h2>
 <p><a href="https://bazel.build/">Bazel</a> is used for building on iOS.</p>
-<p>You can generate an Xcode project thanks to <a href="https://github.com/MobileNativeFoundation/rules_xcodeproj">rules_xcodeproj</a> intergration.</p>
+<p>You can generate an Xcode project thanks to <a href="https://github.com/MobileNativeFoundation/rules_xcodeproj">rules_xcodeproj</a> integration.</p>
 <p>You need to install <a href="https://github.com/bazelbuild/bazelisk">bazelisk</a>, which is a wrapper around Bazel which ensures that the version specified in <code>.bazelversion</code> is used.</p>
 <pre><code>brew install bazelisk
 </code></pre>
@@ -1276,7 +1276,7 @@ cd maplibre-native
 <h1 id="release-policy"><a class="header" href="#release-policy">Release Policy</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The following release policiy applies specifically to MapLibre <strong>Android</strong> and MapLibre <strong>iOS</strong>.</p>
+<p>The following release policy applies specifically to MapLibre <strong>Android</strong> and MapLibre <strong>iOS</strong>.</p>
 </blockquote>
 <ul>
 <li>We use <a href="https://semver.org/">semantic versioning</a>. Breaking changes will always result in a major release.</li>
@@ -1332,7 +1332,7 @@ property: <code>background-color</code>, <code>line-width</code>, etc., with a s
 <h3 id="metrics"><a class="header" href="#metrics"><code>metrics</code></a></h3>
 <p>The JSON files in this directory are the manifests (to be passed to render test CLI tool). This directory also contains many directories that store metrics used by the tests. Other files/directories include:</p>
 <ul>
-<li><code>cache-style.db</code>, <code>cache-metrics.db</code>: pre-populated cache (SQLite database file) so the tests can run offline. You may need to update this database when you need a new resource available during test executation.</li>
+<li><code>cache-style.db</code>, <code>cache-metrics.db</code>: pre-populated cache (SQLite database file) so the tests can run offline. You may need to update this database when you need a new resource available during test execution.</li>
 <li><code>binary-size</code>: binary-size checks. Not used right now, see <a href="https://github.com/maplibre/maplibre-native/issues/3379">#3379</a>.</li>
 <li><code>expectations</code>: expectations for various platforms. E.g. <code>expectations/platform-android</code> is referenced by the <code>android-render-test-runner-metrics.json</code> manifest under its <code>expectation_paths</code> key.</li>
 <li><code>ignores</code>: contains JSON files with as key a test path and as value a reason why a test is ignored. For example:
@@ -1353,7 +1353,7 @@ Manifests can have a key <code>ignore_paths</code> with an array of ignore files
 </code></pre>
 </li>
 </ul>
-<h4 id="metricsintergration"><a class="header" href="#metricsintergration"><code>metrics/intergration</code></a></h4>
+<h4 id="metricsintegration"><a class="header" href="#metricsintegration"><code>metrics/integration</code></a></h4>
 <ul>
 <li><code>data</code>, <code>geojson</code>, <code>glyphs</code>, <code>image</code>, <code>sprites</code>, <code>styles</code>, <code>tiles</code>, <code>tilesets</code>, <code>video</code>: various data used by the render tests.</li>
 <li><code>expression-tests</code>: tests that verify the behavior of <a href="https://maplibre.org/maplibre-style-spec/expressions/">expressions</a> of the MapLibre Style Spec.</li>
